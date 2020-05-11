@@ -51,7 +51,7 @@ var DoLoad = function()
 	var s = document.createElement('script'), d = document.documentElement;
 	s.src = 'mmlove.js';
 	s.async = true;
-	s.onerror = function(e) { d.removeChild(s); Msg(TXT.DLERROR); canvas.disabled = false; };
+	s.onerror = function(e) { d.removeChild(s); Msg(TXT.DLERROR); };
 	d.appendChild(s);
 };
 window.addEventListener("keydown", function(e) {
@@ -77,7 +77,6 @@ canvas.oncontextmenu = function(e) { e.preventDefault() };
 ctx = canvas.getContext('2d');
 ctx.font = '30px sans-serif';
 ctx.textAlign = 'center';
-canvas.disabled = true;
 DoLoad();
 })()</script>
 </body>
