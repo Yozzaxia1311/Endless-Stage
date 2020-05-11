@@ -1,10 +1,10 @@
 <body>
 <div id="wrapper">
-	<div id="main">
+	<div id="main" style="width:512px;height:448px">
 		<canvas id="canvas" width="512" height="448">
 	</div>
+	<button id="fullscreen" style="visibility:hidden">Fullscreen</button>
 </div>
-<button id="fullscreen">Fullscreen</button>
 <script type="text/javascript">(function(){
 var TXT =
 {
@@ -15,6 +15,7 @@ var TXT =
 	NOWEBGL: 'Your browser or graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>.<br>Find out how to get it <a href="http://get.webgl.org/">here</a>.',
 };
 var canvas = document.getElementById('canvas'), ctx;
+var fs = document.getElementById("fullscreen");
 var Msg = function(m)
 {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -35,9 +36,10 @@ var DoExecute = function()
 	Module.postRun = function()
 	{
 		if (!Module.noExitRuntime) { Fail(); return; }
-		canvas.parentNode.replaceChild(Module.canvas, canvas);
+    canvas.parentNode.replaceChild(Module.canvas, canvas);
 		Txt = Msg = ctx = canvas = null;
 		Module.canvas.focus();
+    fs.style.visibility = "visible";
 	};
 	setTimeout(function() { Module.run(['/p']); }, 50);
 };
@@ -47,7 +49,7 @@ var DoLoad = function()
 	window.onerror = function(e,u,l) { Fail(e+'<br>('+u+':'+l+')'); };
 	Module = { TOTAL_MEMORY: 1024*1024*100, TOTAL_STACK: 1024*1024*2, currentScriptUrl: '-', preInit: DoExecute };
 	var s = document.createElement('script'), d = document.documentElement;
-	s.src = 'https://cdn.jsdelivr.net/gh/Yozzaxia1311/Endless-Stage/mmlove.js';
+	s.src = 'mmlove.js';
 	s.async = true;
 	s.onerror = function(e) { d.removeChild(s); Msg(TXT.DLERROR); canvas.disabled = false; };
 	d.appendChild(s);
@@ -58,11 +60,18 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
     }
 }, false);
-document.getElementById("fullscreen").onclick = function()
+fs.onclick = function()
 {
-	var fs = canvas['requestFullscreen'] || canvas['mozRequestFullscreen'] || canvas['mozRequestFullScreen'] || (canvas['webkitRequestFullScreen'] ? function() { canvas['webkitRequestFullScreen'](1) } : null);
-	if (fs) fs.apply(canvas, []);
-	canvas.focus();
+  var canvas = document.getElementById('canvas')
+  if (canvas.requestFullscreen) {
+    canvas.requestFullscreen();
+  } else if (canvas.mozRequestFullScreen) { /* Firefox */
+    canvas.mozRequestFullScreen();
+  } else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    canvas.webkitRequestFullscreen();
+  } else if (canvas.msRequestFullscreen) { /* IE/Edge */
+    canvas.msRequestFullscreen();
+  }
 };
 canvas.oncontextmenu = function(e) { e.preventDefault() };
 ctx = canvas.getContext('2d');
