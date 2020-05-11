@@ -47,7 +47,7 @@ var DoLoad = function()
 	window.onerror = function(e,u,l) { Fail(e+'<br>('+u+':'+l+')'); };
 	Module = { TOTAL_MEMORY: 1024*1024*100, TOTAL_STACK: 1024*1024*2, currentScriptUrl: '-', preInit: DoExecute };
 	var s = document.createElement('script'), d = document.documentElement;
-	s.src = 'https://cdn.jsdelivr.net/gh/Yozzaxia1311/Endless-Stage/index.js';
+	s.src = 'https://cdn.jsdelivr.net/gh/Yozzaxia1311/Endless-Stage/mmlove.js';
 	s.async = true;
 	s.onerror = function(e) { d.removeChild(s); Msg(TXT.DLERROR); canvas.disabled = false; };
 	d.appendChild(s);
