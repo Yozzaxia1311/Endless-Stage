@@ -1,9 +1,10 @@
 <body>
 <div id="wrapper">
 	<div id="main">
-		<canvas id="canvas" width="512" height="448"></canvas>
+		<canvas id="canvas" width="512" height="448">
 	</div>
 </div>
+<button id="fullscreen">Fullscreen</button>
 <script type="text/javascript">(function(){
 var TXT =
 {
@@ -57,6 +58,12 @@ window.addEventListener("keydown", function(e) {
         e.preventDefault();
     }
 }, false);
+document.getElementById("fullscreen").onclick = function()
+{
+	var fs = canvas['requestFullscreen'] || canvas['mozRequestFullscreen'] || canvas['mozRequestFullScreen'] || (canvas['webkitRequestFullScreen'] ? function() { canvas['webkitRequestFullScreen'](1) } : null);
+	if (fs) fs.apply(canvas, []);
+	canvas.focus();
+};
 canvas.oncontextmenu = function(e) { e.preventDefault() };
 ctx = canvas.getContext('2d');
 ctx.font = '30px sans-serif';
