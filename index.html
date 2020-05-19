@@ -1,82 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+            overflow: hidden;
+		}
+        #canvasArea {
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+
+        
+	</style>
+    <!-- Libs and GDJS core files : -->
+		<script src="libs\jshashtable.js" crossorigin="anonymous"></script>
+	<script src="gd.js" crossorigin="anonymous"></script>
+	<script src="gd-splash-image.js" crossorigin="anonymous"></script>
+	<script src="libs\hshg.js" crossorigin="anonymous"></script>
+	<script src="libs\rbush.js" crossorigin="anonymous"></script>
+	<script src="inputmanager.js" crossorigin="anonymous"></script>
+	<script src="jsonmanager.js" crossorigin="anonymous"></script>
+	<script src="timemanager.js" crossorigin="anonymous"></script>
+	<script src="runtimeobject.js" crossorigin="anonymous"></script>
+	<script src="profiler.js" crossorigin="anonymous"></script>
+	<script src="runtimescene.js" crossorigin="anonymous"></script>
+	<script src="scenestack.js" crossorigin="anonymous"></script>
+	<script src="polygon.js" crossorigin="anonymous"></script>
+	<script src="force.js" crossorigin="anonymous"></script>
+	<script src="layer.js" crossorigin="anonymous"></script>
+	<script src="timer.js" crossorigin="anonymous"></script>
+	<script src="runtimegame.js" crossorigin="anonymous"></script>
+	<script src="variable.js" crossorigin="anonymous"></script>
+	<script src="variablescontainer.js" crossorigin="anonymous"></script>
+	<script src="oncetriggers.js" crossorigin="anonymous"></script>
+	<script src="runtimebehavior.js" crossorigin="anonymous"></script>
+	<script src="spriteruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="events-tools\commontools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\runtimescenetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\inputtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\objecttools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\cameratools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\soundtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\storagetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\stringtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\windowtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools\networktools.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\pixi.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\pixi-filters-tools.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\runtimegame-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\runtimescene-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\layer-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\pixi-image-manager.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\spriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers\loadingscreen-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager\howler.min.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager\howler-sound-manager.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager\fontfaceobserver.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager\fontfaceobserver-font-manager.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__test__mouse.js" crossorigin="anonymous"></script>
+	<script src="code0.js" crossorigin="anonymous"></script>
+	<script src="data.js" crossorigin="anonymous"></script>
+
+
+</head>
 <body>
-<div id="wrapper">
-	<div id="main" style="width:512px;height:448px">
-		<canvas id="canvas" width="512" height="448">
-	</div>
-	<button id="fullscreen" style="visibility:hidden">Fullscreen</button>
-</div>
-<script type="text/javascript">(function(){
-var TXT =
-{
-	PLAYBTN: 'Click here to launch the game',
-	LOAD:    'Downloading...',
-	EXECUTE: 'Starting...',
-	DLERROR: 'Error while downloading game data.\nCheck your internet connection.',
-	NOWEBGL: 'Your browser or graphics card does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>.<br>Find out how to get it <a href="http://get.webgl.org/">here</a>.',
-};
-var canvas = document.getElementById('canvas'), ctx;
-var fs = document.getElementById("fullscreen");
-var Msg = function(m)
-{
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = '#888';
-	for (var i = 0, a = m.split('\n'), n = a.length; i != n; i++)
-		ctx.fillText(a[i], canvas.width/2, canvas.height/2-(n-1)*20+10+i*40);
-};
-var Fail = function(m)
-{
-	canvas.outerHTML = '<div style="max-width:90%;width:'+canvas.clientWidth+'px;height:'+canvas.clientHeight+'px;background:#000;display:table-cell;vertical-align:middle"><div style="background-color:#FFF;color:#000;padding:1.5em;max-width:640px;width:80%;margin:auto;text-align:center">'+TXT.NOWEBGL+(m?'<br><br>'+m:'')+'</div></div>';
-};
-var DoExecute = function()
-{
-	Msg(TXT.EXECUTE);
-	Module.canvas = canvas.cloneNode(false);
-	Module.canvas.oncontextmenu = function(e) { e.preventDefault() };
-	Module.setWindowTitle = function(title) { };
-	Module.postRun = function()
-	{
-		if (!Module.noExitRuntime) { Fail(); return; }
-    canvas.parentNode.replaceChild(Module.canvas, canvas);
-		Txt = Msg = ctx = canvas = null;
-		Module.canvas.focus();
-    fs.style.visibility = "visible";
-	};
-	setTimeout(function() { Module.run(['/p']); }, 50);
-};
-var DoLoad = function()
-{
-	Msg(TXT.LOAD);
-	window.onerror = function(e,u,l) { Fail(e+'<br>('+u+':'+l+')'); };
-	Module = { TOTAL_MEMORY: 1024*1024*100, TOTAL_STACK: 1024*1024*2, currentScriptUrl: '-', preInit: DoExecute };
-	var s = document.createElement('script'), d = document.documentElement;
-	s.src = 'mmlove.js';
-	s.async = true;
-	s.onerror = function(e) { d.removeChild(s); Msg(TXT.DLERROR); };
-	d.appendChild(s);
-};
-window.addEventListener("keydown", function(e) {
-    // space and arrow keys
-    if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-        e.preventDefault();
-    }
-}, false);
-fs.onclick = function()
-{
-  var canvas = document.getElementById('canvas')
-  if (canvas.requestFullscreen) {
-    canvas.requestFullscreen();
-  } else if (canvas.mozRequestFullScreen) { /* Firefox */
-    canvas.mozRequestFullScreen();
-  } else if (canvas.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-    canvas.webkitRequestFullscreen();
-  } else if (canvas.msRequestFullscreen) { /* IE/Edge */
-    canvas.msRequestFullscreen();
-  }
-};
-canvas.oncontextmenu = function(e) { e.preventDefault() };
-ctx = canvas.getContext('2d');
-ctx.font = '30px sans-serif';
-ctx.textAlign = 'center';
-DoLoad();
-})()</script>
+
+    
+	<script>
+
+    (function() {
+        //Initialization
+        var game = new gdjs.RuntimeGame(gdjs.projectData, {});
+
+        //Create a renderer
+        game.getRenderer().createStandardCanvas(document.body);
+
+        //Bind keyboards/mouse/touch events
+        game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
+
+        //Load all assets and start the game
+        game.loadAllAssets(function() {
+            game.startGameLoop();
+        });
+    })();
+
+	</script>
 </body>
+</html>
